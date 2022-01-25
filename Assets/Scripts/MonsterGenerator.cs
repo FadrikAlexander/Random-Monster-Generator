@@ -44,37 +44,34 @@ public class MonsterGenerator : MonoBehaviour
     }
 
     #region Random Seed Manipulation
-    string currentSeed;
+    int currentSeed;
     void SetRandomSeed()
     {
-        currentSeed = seedInputField.text;
-
-        if (currentSeed != "")
+        if (seedInputField.text != "")
         {
-            try
+            try //only numbers
             {
-                Random.InitState(System.Int32.Parse(seedInputField.text));
+                currentSeed = System.Int32.Parse(seedInputField.text);
             }
-            catch
+            catch //if contains Letters
             {
-                Random.InitState(seedInputField.text.GetHashCode());
+                currentSeed = seedInputField.text.GetHashCode();
             }
         }
         else
-            currentSeed = Random.seed.ToString();
+            currentSeed = Random.seed;
 
 
-        placeHolderSeedText.text = currentSeed;
-        Debug.Log(currentSeed);
+        Random.InitState(currentSeed);
+        placeHolderSeedText.text = currentSeed.ToString();
     }
 
     public void CopySeedToClipboard()
     {
-        GUIUtility.systemCopyBuffer = currentSeed;
+        GUIUtility.systemCopyBuffer = currentSeed.ToString();
     }
     public void ClearSeed()
     {
-        currentSeed = "";
         seedInputField.text = "";
     }
     #endregion
