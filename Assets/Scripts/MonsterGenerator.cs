@@ -14,6 +14,7 @@ public class MonsterGenerator : MonoBehaviour
     [Space]
     [Header("UI Elements")]
     [SerializeField] TMP_InputField seedInputField;
+    [SerializeField] TextMeshProUGUI placeHolderSeedText;
     [SerializeField] TextMeshProUGUI seedName;
 
     GameObject currentMonster = null;
@@ -42,11 +43,41 @@ public class MonsterGenerator : MonoBehaviour
         currentMonster.transform.position = this.transform.position;
     }
 
+    #region Random Seed Manipulation
+    string currentSeed;
     void SetRandomSeed()
     {
-        if (seedInputField.text != "")
-            Random.InitState(seedInputField.text.GetHashCode());
+        currentSeed = seedInputField.text;
+
+        if (currentSeed != "")
+        {
+            try
+            {
+                Random.InitState(System.Int32.Parse(seedInputField.text));
+            }
+            catch
+            {
+                Random.InitState(seedInputField.text.GetHashCode());
+            }
+        }
+        else
+            currentSeed = Random.seed.ToString();
+
+
+        placeHolderSeedText.text = currentSeed;
+        Debug.Log(currentSeed);
     }
+
+    public void CopySeedToClipboard()
+    {
+        GUIUtility.systemCopyBuffer = currentSeed;
+    }
+    public void ClearSeed()
+    {
+        currentSeed = "";
+        seedInputField.text = "";
+    }
+    #endregion
 
     #region Colors
     int colorIndex = 0;
