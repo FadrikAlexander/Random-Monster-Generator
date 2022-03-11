@@ -9,6 +9,9 @@ public class MonsterPartSelector : MonoBehaviour
 
     private void OnEnable()
     {
+        foreach (var v in monsterPartList)
+            v.SetActive(false);
+
         monsterPartList[Random.Range(0, monsterPartList.Count)].SetActive(true);
     }
 }
